@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+    <title>Control Panel</title>
+</head>
+<body>
+<nav class="container-fluid">
+    <ul>
+        <li><strong>Expense Tracker</strong></li>
+    </ul>
+    <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="control.html">Control</a></li>
+        <li><a href="#" role="button">Contact</a></li>
+    </ul>
+</nav>
+<main class="container">
+    <section>
+        <h2>Control Panel</h2>
+        <div>
+            <label for="newDailyLimit">New Daily Limit ($):</label>
+            <input type="number" id="newDailyLimit" value="30" min="0">
+        </div>
+        <div>
+            <label for="newTotalBalance">New Total Balance ($):</label>
+            <input type="number" id="newTotalBalance" value="3581" min="0">
+        </div>
+        <div>
+            <label for="newCurrentBalance">New Current Balance ($):</label>
+            <input type="number" id="newCurrentBalance" value="0" min="0">
+        </div>
+        <button onclick="updateValues()">Update Values</button>
+    </section>
+</main>
+<footer class="container">
+    <small>
+        <a href="#">Privacy Policy</a> • <a href="#">Terms of Use</a>
+    </small>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>
