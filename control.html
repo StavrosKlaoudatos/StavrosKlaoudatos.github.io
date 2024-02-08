@@ -33,6 +33,13 @@
             <input type="number" id="newCurrentBalance" value="0" min="0">
         </div>
         <button onclick="updateValues()">Update Values</button>
+
+        <div>
+            <label for="resetInterval">Reset Interval (hours):</label>
+            <input type="number" id="resetInterval" value="24" min="1" max="168"> <!-- 1 hour to 7 days -->
+        </div>
+        <button onclick="resetTimer()">Reset Timer</button>
+        
     </section>
 </main>
 <footer class="container">
