@@ -5,7 +5,7 @@ function initialize() {
     localStorage.setItem("dailyBalance", "30");
   }
   if (!localStorage.getItem("totalBalance")) {
-    localStorage.setItem("totalBalance", "3581");
+    localStorage.setItem("totalBalance", "3163");
   }
   if (!localStorage.getItem("currentBalance")) {
     localStorage.setItem("currentBalance", "0");
