@@ -1,3 +1,23 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+    apiKey: "AIzaSyCSBPcjnnT1SpwkTqqzz0zRGvwjLTW96FI",
+    authDomain: "researchhub-d0a31.firebaseapp.com",
+    databaseURL: "https://researchhub-d0a31-default-rtdb.firebaseio.com",
+    projectId: "researchhub-d0a31",
+    storageBucket: "researchhub-d0a31.appspot.com",
+    messagingSenderId: "279820246029",
+    appId: "1:279820246029:web:0a8796a4989f15a7f0c944",
+    measurementId: "G-7B6S7J1W35"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
 document.addEventListener('DOMContentLoaded', function () {
     const urlParams = new URLSearchParams(window.location.search);
     const researcherId = urlParams.get('id');
@@ -7,11 +27,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            const researcher = data.find(r => r.id == researcherId);
-            if (researcher) {
+    const researcherRef = ref(db, `/${researcherId}`);
+    get(researcherRef)
+        .then(snapshot => {
+            if (snapshot.exists()) {
+                const researcher = snapshot.val();
                 const profileContainer = document.getElementById('profile-container');
                 profileContainer.innerHTML = `
                     <h2 class="text-2xl font-bold mb-2">${researcher.name}</h2>
@@ -60,7 +80,6 @@ function fetchPublications(researcher) {
             });
             publications.sort((a, b) => b.date - a.date); // Sort by date descending
             displayPublications(publications);
-            savePublications(researcher.id, publications);
         })
         .catch(error => console.error('Error fetching publications:', error));
 }
@@ -73,27 +92,4 @@ function displayPublications(publications) {
         listItem.innerHTML = `<a href="${pub.link}" class="text-blue-500" target="_blank">${pub.title} (${pub.date})</a>`;
         publicationsList.appendChild(listItem);
     });
-}
-
-function savePublications(researcherId, publications) {
-    fetch('data.json')
-        .then(response => response.json())
-        .then(data => {
-            const researcher = data.find(r => r.id == researcherId);
-            if (researcher) {
-                researcher.papers = publications;
-                // Now send updated data back to server
-                fetch('/api/update-researcher', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(data)
-                })
-                .then(response => response.json())
-                .then(result => console.log('Successfully updated publications:', result))
-                .catch(error => console.error('Error updating publications:', error));
-            }
-        })
-        .catch(error => console.error('Error fetching data for update:', error));
 }
