@@ -35,10 +35,9 @@ function initApp() {
     get(dbRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-                researchers = Object.values(snapshot.val());
+                researchers = Object.keys(snapshot.val()).map(key => ({ id: key, ...snapshot.val()[key] }));
                 populateDropdowns(researchers);
                 displayResearchers(researchers);
-                console.error('researchers');
             } else {
                 console.error('No data available');
             }
@@ -80,11 +79,11 @@ function initApp() {
             researcherList.innerHTML = '<li class="py-2 text-center text-gray-500">No researchers found</li>';
             return;
         }
-        data.forEach((researcher, index) => {
+        data.forEach(researcher => {
             const listItem = document.createElement('li');
             listItem.className = 'list-item bg-white shadow-md';
             listItem.innerHTML = `
-                <a href="profile.html?id=${index}" class="text-gray-600 block p-1">
+                <a href="profile.html?id=${researcher.id}" class="text-gray-600 block p-1">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="flex items-center">
@@ -133,4 +132,3 @@ function initApp() {
     document.getElementById('department-dropdown').addEventListener('change', filterResearchers);
     document.getElementById('exclude-emeritus').addEventListener('change', filterResearchers);
 }
-
