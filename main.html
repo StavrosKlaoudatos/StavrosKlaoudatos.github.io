@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Researchers List</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    
+    <div class="container p-4 hidden">
+        <h1 class="text-3xl font-bold mb-6 text-center">Research Hub</h1>
+        <div class="glass mb-6">
+            <div class="mb-4">
+                <input type="text" id="search-bar" placeholder="Search..." class="input-style">
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                <div>
+                    <label for="university-dropdown" class="block mb-2">University</label>
+                    <select id="university-dropdown" class="input-style">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="interest-dropdown" class="block mb-2">Interest</label>
+                    <select id="interest-dropdown" class="input-style">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="department-dropdown" class="block mb-2">Department</label>
+                    <select id="department-dropdown" class="input-style">
+                        <option value="">All</option>
+                    </select>
+                </div>
+                <div class="flex items-center">
+                    <input type="checkbox" id="exclude-emeritus" class="custom-checkbox">
+                    <label for="exclude-emeritus" class="ml-2">Exclude Emeritus</label>
+                </div>
+            </div>
+        </div>
+        <ul id="researcher-list" class="space-y-4"></ul>
+    </div>
+    <script type="module" src="App.js"></script>
+</body>
+</html>
+
+
