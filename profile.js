@@ -80,7 +80,6 @@ function fetchPublications(researcher) {
             });
             publications.sort((a, b) => b.date - a.date); // Sort by date descending
             displayPublications(publications);
-            savePublications(researcher.id, publications);
         })
         .catch(error => console.error('Error fetching publications:', error));
 }
@@ -93,9 +92,4 @@ function displayPublications(publications) {
         listItem.innerHTML = `<a href="${pub.link}" class="text-blue-500" target="_blank">${pub.title} (${pub.date})</a>`;
         publicationsList.appendChild(listItem);
     });
-}
-
-function savePublications(researcherId, publications) {
-    // The save function can be customized to store the publications if needed
-    console.log(`Publications for researcher ${researcherId} saved.`);
 }
