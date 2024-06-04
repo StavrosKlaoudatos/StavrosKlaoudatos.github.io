@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
 
-    const researcherRef = ref(db, `/${researcherId}`);
+    const researcherRef = ref(db, `/${researcherId-1}`);
     get(researcherRef)
         .then(snapshot => {
             if (snapshot.exists()) {
