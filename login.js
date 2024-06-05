@@ -1,11 +1,12 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
     apiKey: "AIzaSyCSBPcjnnT1SpwkTqqzz0zRGvwjLTW96FI",
     authDomain: "researchhub-d0a31.firebaseapp.com",
+    databaseURL: "https://researchhub-d0a31-default-rtdb.firebaseio.com",
     projectId: "researchhub-d0a31",
     storageBucket: "researchhub-d0a31.appspot.com",
     messagingSenderId: "279820246029",
@@ -20,27 +21,15 @@ const auth = getAuth(app);
 document.getElementById('login-btn').addEventListener('click', () => {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
-
     signInWithEmailAndPassword(auth, email, password)
-        .then(() => {
+        .then((userCredential) => {
             window.location.href = 'main.html';
         })
-        .catch(error => {
+        .catch((error) => {
             document.getElementById('error-message').textContent = error.message;
         });
 });
 
 document.getElementById('register-btn').addEventListener('click', () => {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-
-    createUserWithEmailAndPassword(auth, email, password)
-        .then(() => {
-            window.location.href = 'main.html';
-        })
-        .catch(error => {
-            document.getElementById('error-message').textContent = error.message;
-        });
+    window.location.href = 'register.html';
 });
-
-

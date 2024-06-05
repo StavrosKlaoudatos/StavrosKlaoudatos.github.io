@@ -20,6 +20,13 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
 
+// Pagination variables
+const itemsPerPage = 20;
+let currentPage = 1;
+let totalResearchers = 0;
+let filteredResearchers = [];
+let allResearchers = [];
+
 // Ensure user is authenticated
 onAuthStateChanged(auth, user => {
     if (user) {
@@ -30,14 +37,13 @@ onAuthStateChanged(auth, user => {
 });
 
 function initApp() {
-    let researchers = [];
-    const dbRef = ref(db, '/');
+    const dbRef = ref(db, 'researchers');
     get(dbRef)
         .then((snapshot) => {
             if (snapshot.exists()) {
-                researchers = Object.keys(snapshot.val()).map(key => ({ id: key, ...snapshot.val()[key] }));
-                populateDropdowns(researchers);
-                displayResearchers(researchers);
+                allResearchers = Object.values(snapshot.val());
+                populateDropdowns(allResearchers);
+                filterResearchers(); // Initialize filteredResearchers
             } else {
                 console.error('No data available');
             }
@@ -64,6 +70,7 @@ function initApp() {
 
     function populateDropdown(dropdownId, items) {
         const dropdown = document.getElementById(dropdownId);
+        dropdown.innerHTML = '<option value="">All</option>'; // Reset dropdown
         items.forEach(item => {
             const option = document.createElement('option');
             option.value = item;
@@ -72,14 +79,20 @@ function initApp() {
         });
     }
 
-    function displayResearchers(data) {
+    function displayPage(page) {
         const researcherList = document.getElementById('researcher-list');
         researcherList.innerHTML = '';
-        if (data.length === 0) {
+
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageResearchers = filteredResearchers.slice(start, end);
+
+        if (pageResearchers.length === 0) {
             researcherList.innerHTML = '<li class="py-2 text-center text-gray-500">No researchers found</li>';
             return;
         }
-        data.forEach(researcher => {
+
+        pageResearchers.forEach((researcher) => {
             const listItem = document.createElement('li');
             listItem.className = 'list-item bg-white shadow-md';
             listItem.innerHTML = `
@@ -97,6 +110,50 @@ function initApp() {
                 </a>`;
             researcherList.appendChild(listItem);
         });
+
+        renderPagination();
+    }
+
+    function renderPagination() {
+        const pagination = document.getElementById('pagination');
+        pagination.innerHTML = '';
+
+        const totalPages = Math.ceil(totalResearchers / itemsPerPage);
+
+        if (totalPages > 1) {
+            if (currentPage > 1) {
+                const prevButton = document.createElement('button');
+                prevButton.textContent = 'Previous';
+                prevButton.className = 'pagination-button';
+                prevButton.addEventListener('click', () => {
+                    currentPage--;
+                    displayPage(currentPage);
+                });
+                pagination.appendChild(prevButton);
+            }
+
+            for (let i = 1; i <= totalPages; i++) {
+                const pageButton = document.createElement('button');
+                pageButton.textContent = i;
+                pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+                pageButton.addEventListener('click', () => {
+                    currentPage = i;
+                    displayPage(currentPage);
+                });
+                pagination.appendChild(pageButton);
+            }
+
+            if (currentPage < totalPages) {
+                const nextButton = document.createElement('button');
+                nextButton.textContent = 'Next';
+                nextButton.className = 'pagination-button';
+                nextButton.addEventListener('click', () => {
+                    currentPage++;
+                    displayPage(currentPage);
+                });
+                pagination.appendChild(nextButton);
+            }
+        }
     }
 
     function filterResearchers() {
@@ -106,7 +163,7 @@ function initApp() {
         const selectedDepartment = document.getElementById('department-dropdown').value;
         const excludeEmeritus = document.getElementById('exclude-emeritus').checked;
 
-        const filteredResearchers = researchers.filter(researcher => {
+        filteredResearchers = allResearchers.filter(researcher => {
             const matchesSearchQuery = searchQuery ? (
                 researcher.name.toLowerCase().includes(searchQuery) ||
                 researcher.university.toLowerCase().includes(searchQuery) ||
@@ -123,7 +180,9 @@ function initApp() {
             return matchesSearchQuery && matchesUniversity && matchesInterest && matchesDepartment && matchesEmeritus;
         });
 
-        displayResearchers(filteredResearchers);
+        totalResearchers = filteredResearchers.length;
+        currentPage = 1; // Reset to first page on new search
+        displayPage(currentPage);
     }
 
     document.getElementById('search-bar').addEventListener('input', filterResearchers);
