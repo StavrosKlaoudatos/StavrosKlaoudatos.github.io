@@ -8,7 +8,7 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container p-4">
+    <div class="container p-4 hidden">
         <h1 class="text-3xl font-bold mb-6 text-center">Research Hub</h1>
         <div class="glass mb-6">
             <div class="mb-4">
@@ -41,7 +41,12 @@
         </div>
         <ul id="researcher-list" class="space-y-4"></ul>
         <div id="pagination" class="flex justify-center mt-4"></div>
+        <div id="recommendations" class="mt-6">
+            <h2 class="text-2xl font-bold mb-4">Recommended Researchers</h2>
+            <ul id="recommendation-list" class="space-y-4"></ul>
+        </div>
     </div>
-    <script type="module" src="App.js"></script>
+    <script type="module" src="app.js"></script>
+    <script type="module" src="recommendations.js"></script>
 </body>
 </html>

@@ -84,28 +84,20 @@ function updateInterestData(userId, researcherId) {
 
     get(userRef)
         .then(snapshot => {
+            let interestIds = [];
             if (snapshot.exists()) {
                 const userData = snapshot.val();
-                let interestIds = userData.Interest_Id || [];
-                if (!interestIds.includes(researcherId)) {
-                    interestIds.push(researcherId);
-                    update(userRef, { Interest_Id: interestIds })
-                        .then(() => {
-                            console.log('Interest data updated successfully.');
-                        })
-                        .catch(error => {
-                            console.error('Error updating interest data:', error);
-                        });
-                }
-            } else {
-                update(userRef, { Interest_Id: [researcherId] })
-                    .then(() => {
-                        console.log('Interest data updated successfully.');
-                    })
-                    .catch(error => {
-                        console.error('Error updating interest data:', error);
-                    });
+                interestIds = userData.Interest_Id || [];
             }
+            interestIds.push(researcherId); 
+            update(userRef, { Interest_Id: interestIds })
+                .then(() => {
+                    console.log('Interest data updated successfully.');
+                })
+                .catch(error => {
+                    console.error('Error updating interest data:', error);
+                });
         })
         .catch(error => console.error('Error fetching user data:', error));
 }
+

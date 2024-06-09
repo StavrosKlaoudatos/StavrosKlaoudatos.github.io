@@ -1,6 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 // Your web app's Firebase configuration
@@ -30,13 +30,29 @@ let allResearchers = [];
 // Ensure user is authenticated
 onAuthStateChanged(auth, user => {
     if (user) {
-        initApp();
+        initApp(user.uid);
     } else {
         window.location.href = 'index.html';
     }
 });
 
-function initApp() {
+
+
+function getUniversityColor(university) {
+    switch (university.toLowerCase()) {
+        case 'princeton university':
+        case 'caltech':
+            return 'yellow-600';
+        case 'harvard university':
+            return 'red-600';
+        default:
+            return 'gray-800';
+    }
+}
+
+
+
+function initApp(uid) {
     const dbRef = ref(db, 'researchers');
     get(dbRef)
         .then((snapshot) => {
@@ -44,6 +60,7 @@ function initApp() {
                 allResearchers = Object.values(snapshot.val());
                 populateDropdowns(allResearchers);
                 filterResearchers(); // Initialize filteredResearchers
+                displayRecommendations(uid);
             } else {
                 console.error('No data available');
             }
@@ -79,6 +96,8 @@ function initApp() {
         });
     }
 
+
+
     function displayPage(page) {
         const researcherList = document.getElementById('researcher-list');
         researcherList.innerHTML = '';
@@ -94,16 +113,19 @@ function initApp() {
 
         pageResearchers.forEach((researcher) => {
             const listItem = document.createElement('li');
-            listItem.className = 'list-item bg-white shadow-md';
+            listItem.className = `list-item bg-white shadow-md`;
+
+            const universityColor = getUniversityColor(researcher.university);
+
             listItem.innerHTML = `
                 <a href="profile.html?id=${researcher.id}" class="text-gray-600 block p-1">
                     <div class="flex justify-between items-center">
                         <div>
                             <div class="flex items-center">
                                 <div class="font-bold text-lg-1000">${researcher.name}</div>
-                                ${researcher.Emeritus === 1 ? '<span class="bg-gray-200 text-gray-700 text-xs font-semibold ml-2 px-2.5 py-0.5 rounded">Emeritus</span>' : ''}
+                                ${researcher.Emeritus === 1 ? `<span class="bg-gray-200 text-gray-700 text-xs font-semibold ml-2 px-2.5 py-0.5 rounded">Emeritus</span>` : ''}
                             </div>
-                            <div class ="text-yellow-600">${researcher.university}</div>
+                            <div class="text-${universityColor}">${researcher.university}</div>
                             <div class="text-gray-600">${researcher.interest}</div>
                         </div>
                     </div>
@@ -190,4 +212,41 @@ function initApp() {
     document.getElementById('interest-dropdown').addEventListener('change', filterResearchers);
     document.getElementById('department-dropdown').addEventListener('change', filterResearchers);
     document.getElementById('exclude-emeritus').addEventListener('change', filterResearchers);
+}
+
+function displayRecommendations(uid) {
+    const dbRef = ref(db, `user-data/${uid}/recommendations`);
+    get(dbRef)
+        .then(snapshot => {
+            if (snapshot.exists()) {
+                const recommendedIds = snapshot.val().recommendations;
+                const recommendedResearchers = allResearchers.filter(researcher => recommendedIds.includes(researcher.id));
+                const recommendationList = document.getElementById('recommendation-list');
+                recommendationList.innerHTML = '';
+
+                recommendedResearchers.forEach(researcher => {
+                    const listItem = document.createElement('li');
+                    listItem.className = `list-item bg-white shadow-md`;
+                    const universityColor = getUniversityColor(researcher.university);
+
+                    listItem.innerHTML = `
+                        <a href="profile.html?id=${researcher.id}" class="text-gray-600 block p-1">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <div class="flex items-center">
+                                        <div class="font-bold text-lg-1000">${researcher.name}</div>
+                                        ${researcher.Emeritus === 1 ? `<span class="bg-gray-200 text-gray-700 text-xs font-semibold ml-2 px-2.5 py-0.5 rounded">Emeritus</span>` : ''}
+                                    </div>
+                                    <div class="text-${universityColor}">${researcher.university}</div>
+                                    <div class="text-gray-600">${researcher.interest}</div>
+                                </div>
+                            </div>
+                        </a>`;
+                    recommendationList.appendChild(listItem);
+                });
+            } else {
+                console.error('No recommendations available');
+            }
+        })
+        .catch(error => console.error('Error fetching recommendations:', error));
 }
