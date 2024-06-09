@@ -226,17 +226,18 @@ function displayRecommendations(uid) {
 
                 recommendedResearchers.forEach(researcher => {
                     const listItem = document.createElement('li');
-                    listItem.className = `list-item bg-white shadow-md`;
+                    listItem.className = `list-item bg-gradient-to-br from-white via-white to-red-400 shadow-md p-3` ;
                     const universityColor = getUniversityColor(researcher.university);
 
                     listItem.innerHTML = `
                         <a href="profile.html?id=${researcher.id}" class="text-gray-600 block p-1">
-                            <div class="flex justify-between items-center">
+                
                                 <div>
                                     <div class="flex items-center">
                                         <div class="font-bold text-lg-1000">${researcher.name}</div>
                                         ${researcher.Emeritus === 1 ? `<span class="bg-gray-200 text-gray-700 text-xs font-semibold ml-2 px-2.5 py-0.5 rounded">Emeritus</span>` : ''}
                                     </div>
+                                    
                                     <div class="text-${universityColor}">${researcher.university}</div>
                                     <div class="text-gray-600">${researcher.interest}</div>
                                 </div>
