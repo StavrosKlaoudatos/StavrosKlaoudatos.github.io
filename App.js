@@ -226,7 +226,7 @@ function displayRecommendations(uid) {
 
                 recommendedResearchers.forEach(researcher => {
                     const listItem = document.createElement('li');
-                    listItem.className = `list-item bg-gradient-to-br from-white via-white to-red-400 shadow-md p-3` ;
+                    listItem.className = `list-item bg-gradient-to-br from-white via-white to-yellow-400 shadow-md p-3` ;
                     const universityColor = getUniversityColor(researcher.university);
 
                     listItem.innerHTML = `
