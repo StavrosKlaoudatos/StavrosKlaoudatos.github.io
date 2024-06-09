@@ -89,7 +89,7 @@ function updateInterestData(userId, researcherId) {
                 const userData = snapshot.val();
                 interestIds = userData.Interest_Id || [];
             }
-            interestIds.push(researcherId); 
+            interestIds.push(researcherId);  // Allow duplicates
             update(userRef, { Interest_Id: interestIds })
                 .then(() => {
                     console.log('Interest data updated successfully.');
@@ -100,4 +100,3 @@ function updateInterestData(userId, researcherId) {
         })
         .catch(error => console.error('Error fetching user data:', error));
 }
-
