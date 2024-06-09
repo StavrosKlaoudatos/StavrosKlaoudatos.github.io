@@ -226,9 +226,10 @@ function displayRecommendations(uid) {
 
                 recommendedResearchers.forEach(researcher => {
                     const listItem = document.createElement('li');
-                    listItem.className = `list-item bg-gradient-to-br from-white via-white to-yellow-400 shadow-md p-3` ;
                     const universityColor = getUniversityColor(researcher.university);
 
+                    listItem.className = `list-item bg-gradient-to-tr from-white via-white to-${universityColor} shadow-md p-3` ;
+                    
                     listItem.innerHTML = `
                         <a href="profile.html?id=${researcher.id}" class="text-gray-600 block p-1">
                 
