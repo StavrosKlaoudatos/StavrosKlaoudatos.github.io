@@ -42,7 +42,20 @@
         <ul id="researcher-list" class="space-y-4"></ul>
         <div id="pagination" class="flex justify-center mt-4"></div>
     </div>
-    <script type="module" src="app.js"></script>
+
+    <!-- Modal for Recommendations -->
+    <div id="recommendation-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 hidden items-center justify-center">
+        <div class="bg-white p-6 rounded-lg shadow-lg w-3/4 max-w-xl">
+            <h2 class="text-xl font-bold mb-4">Recommended Researchers</h2>
+            <ul id="recommendation-list" class="space-y-4 mb-4"></ul>
+            <button id="close-modal-btn" class="bg-yellow-600 text-white px-4 py-2 rounded">Close</button>
+        </div>
+    </div>
+
+    <!-- Button to Open Modal -->
+    <button id="open-modal-btn" class="fixed bottom-4 right-4 bg-yellow-600 text-white px-4 py-2 rounded-full shadow-lg">Recommendations</button>
+
+    <script type="module" src="App.js"></script>
     <script type="module" src="recommendations.js"></script>
 </body>
 </html>
