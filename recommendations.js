@@ -81,7 +81,7 @@ async function generateRecommendationsForUser(uid) {
         }
 
         // Generate recommendations for the currently signed-in user
-        const viewedIds = user.Interest_Id.slice(Math.max(arr.length - 5, 1));
+        const viewedIds = user.Interest_Id;
 
         const recommendedIds = generateRecommendations(viewedIds);
 

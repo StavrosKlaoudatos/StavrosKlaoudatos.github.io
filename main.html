@@ -8,7 +8,7 @@
     <link href="styles.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container p-4">
+    <div class="container p-4 hidden">
         <h1 class="text-3xl font-bold mb-6 text-center">Research Hub</h1>
         <div class="glass mb-6">
             <div class="mb-4">
@@ -56,17 +56,8 @@
     </div>
 
     
-    <script>
-        const modal = document.getElementById('recommendation-modal');
-        const modalCloseBtn = document.getElementById('close-modal-btn');
-
-        modalCloseBtn.addEventListener('click', () => {
-            modal.classList.remove('hidden');
-        });
-    </script>
-    
+   
     <script type="module" src="App.js"></script>
     <script type="module" src="recommendations.js"></script>
 </body>
 </html>
-
