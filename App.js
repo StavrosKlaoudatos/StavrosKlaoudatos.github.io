@@ -37,13 +37,6 @@ onAuthStateChanged(auth, user => {
 });
 
 
-document.getElementById('open-modal-btn').addEventListener('click', () => {
-    document.getElementById('recommendation-modal').classList.remove('hidden');
-});
-
-document.getElementById('close-modal-btn').addEventListener('click', () => {
-    document.getElementById('recommendation-modal').classList.add('hidden');
-});
 
 
 function getUniversityColor(university) {
@@ -299,3 +292,21 @@ function displayRecommendations(uid) {
         .catch(error => console.error('Error fetching recommendations:', error));
 }
 
+
+
+const openModalBtn = document.getElementById('open-modal-btn');
+const recommendationModal = document.getElementById('recommendation-modal');
+const closeModalBtn = document.getElementById('close-modal-btn');
+
+openModalBtn.addEventListener('click', () => {
+    recommendationModal.style.display = "flex";
+});
+
+closeModalBtn.addEventListener('click', () => {
+    recommendationModal.style.display = "none";
+});
+
+recommendationModal.addEventListener('click', (event) => {
+    if (event.target === recommendationModal) {
+        recommendationModal.style.display = "none";
+}});
