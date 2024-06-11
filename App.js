@@ -37,6 +37,14 @@ onAuthStateChanged(auth, user => {
 });
 
 
+document.getElementById('open-modal-btn').addEventListener('click', () => {
+    document.getElementById('recommendation-modal').classList.remove('hidden');
+});
+
+document.getElementById('close-modal-btn').addEventListener('click', () => {
+    document.getElementById('recommendation-modal').classList.add('hidden');
+});
+
 
 function getUniversityColor(university) {
     switch (university.toLowerCase()) {
@@ -291,10 +299,3 @@ function displayRecommendations(uid) {
         .catch(error => console.error('Error fetching recommendations:', error));
 }
 
-document.getElementById('open-modal-btn').addEventListener('click', () => {
-    document.getElementById('recommendation-modal').classList.remove('hidden');
-});
-
-document.getElementById('close-modal-btn').addEventListener('click', () => {
-    document.getElementById('recommendation-modal').classList.add('hidden');
-});
